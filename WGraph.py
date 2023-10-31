@@ -34,12 +34,13 @@ class WGraph:
 			# From the graph, it looks undirected.
 			# So it is a must to associate the nodes in two possible directions
 			# From A to B = 10 or B to A = 10
-			self.graph[n1][n2] = w
-			self.graph[n2][n1] = w
+			if n2 not in self.graph[n1]:
+				self.graph[n1][n2] = w
+				self.graph[n2][n1] = w
    
 	def dijkstra(self, start, end):
 		"""
-		Calculates the distance between two nodes in a weighted graph using Dijkstra's algorithm
+		 Calculates the distance between two nodes in a weighted graph using Dijkstra's algorithm
 		:param start: The starting node from which to calculate the distance
 		:param end: The destination node to which the shortest distance is calculated
 		:return: The shortest distance from the starting node to the destination node (float). distance as set
@@ -47,7 +48,9 @@ class WGraph:
 		"""
 		distances = {node: float('inf') for node in self.graph}
 		distances[start] = 0
+		# priority_queue = [(0, start)]
 		priority_queue = [(0, start)]
+		previous_nodes = {}
 
 		while priority_queue:
 			current_distance, current_node = heapq.heappop(priority_queue)
@@ -60,7 +63,16 @@ class WGraph:
 
 				if distance < distances[neighbor]:
 					distances[neighbor] = distance
+					previous_nodes[neighbor] = current_node
 					heapq.heappush(priority_queue, (distance, neighbor))
 
-		return distances[end]
+			path = []
+			current = end
+			while current is not None:
+				path.insert(0, current)
+				current = previous_nodes.get(current)
+    
+			path_cost = distances[end]
+    
+		return path, path_cost
 	
