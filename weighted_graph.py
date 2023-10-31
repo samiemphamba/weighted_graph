@@ -17,7 +17,7 @@ Description:
 	- Lastly it calcultes shortest distance from A to B using breadth-first search (BFS)
 """
 
-class wGraph:
+class WGraph:
 	def __init__(self):
 		self.graph = {} #   dictionary
   
